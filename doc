@@ -1,0 +1,29 @@
+structure:
+    - instructions
+    - syscalls
+    - tips
+
+instructions:
+    (b 'lable')     = jump to lable
+    (beq 'lable')   = jump to lable if true
+
+syscalls:
+    #64  = write
+    #93  = exit
+    #220 = fork
+    #221 = execve
+
+tips:
+    To make a str do {
+        .section .data
+        msg:    .asciz "the str"
+    }
+
+    Read user input {
+        mov x0, #0               // File descriptor 0 (stdin)
+        ldr x1, =buffer          // Load the address of the buffer into x1
+        mov x2, #128             // Number of bytes to read into x2
+        bl read                  // Call the read_input function
+    }
+
+    vector<string> max_limit is 255

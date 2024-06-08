@@ -1,0 +1,103 @@
+template<typename T>
+            class vector {
+                buf<T> data_;
+                size_t size_;
+                size_t capacity_;
+
+            public:
+                // Constructors
+                vector<T>()
+                    : data_(NULL), size_(0), capacity_(0) {
+                }
+
+                explicit vector<T>(size_t size)
+                    : data_((T*)malloc(size * sizeof(T))), size_(size), capacity_(size) {
+                }
+
+                // Destructor
+                ~vector<T>() {
+                    free(data_);
+                }
+
+                // Element access
+                auto operator [] ( size_t index ) -> T& {
+                    return data_[index];
+                }
+
+                auto operator [] ( size_t index ) const -> T& {
+                    return data_[index];
+                }
+
+                auto operator << ( T element ) {
+                    if (size_ == capacity_) {
+                        capacity_ *= 2;
+                        buf<T> new_data(capacity_);
+                        for (size_t i = 0; i < size_; ++i) {
+                            new_data[i] = data_[i];
+                        }
+
+                        free(data_);
+                        data_ = new_data;
+                    }
+
+                    data_[size_] = element;
+                    size_++;
+                    return *this;
+                }
+
+                // Capacity
+                auto size () const -> size_t {
+                    return size_;
+                }
+
+                auto capacity () const -> size_t {
+                    return capacity_;
+                }
+
+                auto empty () const -> bool {
+                    return size_ == 0;
+                }
+
+                // Modifiers
+                auto push_back ( T element ) -> void {
+                    if (size_ == capacity_) {
+                        capacity_ *= 2;
+                        buf<T> new_data(capacity_);
+                        for (size_t i = 0; i < size_; ++i) {
+                            new_data[i] = data_[i];
+                        }
+
+                        free(data_);
+                        data_ = new_data;
+                    }
+
+                    data_[size_] = element;
+                    size_++;
+                }
+
+                auto pop_back() -> void {
+                    if (size_ > 0) {
+                        size_--;
+                    }
+                }
+
+                auto clear() -> void {
+                    size_ = 0;
+                }
+
+                auto resize(size_t new_size) -> void {
+                    if (new_size > capacity_) {
+                        capacity_ = new_size;
+                        buf<T> new_data(capacity_);
+                        for (size_t i = 0; i < size_; ++i) {
+                            new_data[i] = data_[i];
+                        }
+
+                        free(data_);
+                        data_ = new_data;
+                    }
+
+                    size_ = new_size;
+                }
+            };
+
